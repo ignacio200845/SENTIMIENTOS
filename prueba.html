@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1.0">
+  <title>Te Amo con Explosión</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: linear-gradient(45deg, rgba(230, 230, 250, 0.8), rgba(173, 216, 230, 0.8)); /* Fondo lavanda-azul claro */
+      color: #FF0000; /* Color rojo para todos los mensajes */
+      font-family: 'Cursive', sans-serif; /* Fuente cursiva para el texto */
+      text-align: center;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    /* Estilos para los corazones flotantes */
+    @keyframes floatHeart {
+      0% {
+        transform: translateY(100vh) scale(0.5);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-100px) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 30px;
+      color: #FF69B4; /* Rosa brillante para los corazones */
+      animation: floatHeart 5s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Los mensajes "Te amo" */
+    .te-amo {
+      position: absolute;
+      font-size: 2rem;
+      animation: falling 5s linear infinite;
+      cursor: pointer;
+      opacity: 0;
+      font-weight: bold;
+    }
+
+    @keyframes falling {
+      0% {
+        transform: translateY(-100px);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+    }
+
+    .explosion {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background-color: rgba(255, 0, 0, 0.8);
+      border-radius: 50%;
+      opacity: 0;
+      animation: explode 0.5s forwards;
+    }
+
+    @keyframes explode {
+      0% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(5);
+        opacity: 0;
+      }
+    }
+
+    /* Mensajes "Te amo" de la explosión */
+    .te-amo-explosion {
+      font-size: 1.5rem;
+      position: absolute;
+      color: #FF0000;
+      animation: explosionEffect 2s ease-out forwards;
+    }
+
+    /* Animación de expansión para los mensajes "Te amo" de la explosión */
+    @keyframes explosionEffect {
+      0% {
+        transform: scale(0) translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(3) translateY(0);
+        opacity: 0;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <script>
+    // Generar muchos mensajes de "Te amo"
+    const numberOfMessages = 50;
+    
+    for (let i = 0; i < numberOfMessages; i++) {
+      const message = document.createElement('div');
+      message.classList.add('te-amo');
+      message.textContent = "Te amo";
+      message.style.left = `${Math.random() * 100}%`;
+      message.style.animationDuration = `${Math.random() * 2 + 3}s`;  // Duración aleatoria para caída
+      document.body.appendChild(message);
+    }
+
+    // Crear corazones flotantes en el fondo
+    setInterval(() => {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.textContent = '❤️';
+      heart.style.left = `${Math.random() * 100}%`;
+      heart.style.animationDuration = `${Math.random() * 3 + 2}s`;
+      document.body.appendChild(heart);
+
+      // Eliminar el corazón después de la animación
+      setTimeout(() => {
+        heart.remove();
+      }, 5000);
+    }, 500);
+
+    // Añadir efecto de explosión al hacer clic
+    document.body.addEventListener('click', (e) => {
+      // Crear el círculo de explosión
+      const explosion = document.createElement('div');
+      explosion.classList.add('explosion');
+      explosion.style.left = `${e.pageX - 50}px`;
+      explosion.style.top = `${e.pageY - 50}px`;
+      document.body.appendChild(explosion);
+
+      // Crear muchos "Te amo" que se expanden desde la explosión
+      for (let i = 0; i < 20; i++) {
+        const teAmo = document.createElement('div');
+        teAmo.classList.add('te-amo-explosion');
+        teAmo.textContent = "Te amo";
+        const offsetX = Math.random() * 100 - 50;  // Aleatorizar desplazamiento horizontal
+        teAmo.style.left = `${e.pageX + offsetX}px`;
+        teAmo.style.top = `${e.pageY - 50}px`;  // Inicia justo arriba del clic
+
+        document.body.appendChild(teAmo);
+
+        // Eliminar los elementos después de la animación
+        setTimeout(() => {
+          teAmo.remove();
+        }, 2000); // Tiempo de duración de la animación (2s)
+      }
+
+      // Eliminar la explosión después de la animación
+      setTimeout(() => {
+        explosion.remove();
+      }, 500);
+    });
+  </script>
+</body>
+</html>
